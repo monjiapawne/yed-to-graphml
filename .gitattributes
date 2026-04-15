@@ -1,0 +1,2 @@
+# Exclude web build artifacts and static assets from language statistics
+web/** linguist-vendored

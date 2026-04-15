@@ -1,0 +1,22 @@
+{{define "nodes" -}}
+    {{range $idx, $node := . -}} 
+    <node id="n{{$idx}}">
+        <data key="d0">
+            <y:SVGNode>
+                <y:Geometry height="{{$node.Height}}" width="{{$node.Width}}"/>
+                <y:SVGModel svgBoundsPolicy="0">
+                    <y:SVGContent refid="{{$idx}}"/>
+                </y:SVGModel>
+                {{/* parameters for yEd/GraphML node label rendering */ -}}
+                <y:NodeLabel alignment="center" autoSizePolicy="content"
+                    fontFamily="Dialog" fontSize="12" fontStyle="plain"
+                    hasBackgroundColor="false" hasLineColor="false"
+                    hasText="false" height="4.0" horizontalTextPosition="center"
+                    iconTextGap="4" modelName="sandwich" modelPosition="s"
+                    textColor="#000000" verticalTextPosition="bottom"
+                    visible="true" width="4" x="0" y="0" />
+            </y:SVGNode>
+        </data>
+    </node>
+    {{end}}
+{{- end}}

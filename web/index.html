@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <title>SVG → GraphML</title>
+    <script src="wasm_exec.js"></script>
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+    <main>
+        <a href="https://github.com/monjiapawne">
+            <img src="yedtographml.svg" alt="svg to graphml">
+        </a>
+        <label id="drop">
+            <input type="file" id="file" accept=".svg" multiple>
+            Drop SVG files here or click to browse
+        </label>
+        <p id="status"></p>
+    </main>
+
+    <script>
+        // setup WASM 
+        let ready = false;
+        const go = new Go();
+
+        WebAssembly
+            .instantiateStreaming(fetch("main.wasm"), go.importObject)
+            .then(result => { go.run(result.instance); ready = true; });
+
+        // DOM refs
+        const drop = document.getElementById("drop");
+        const fileInput = document.getElementById("file");
+        const status = document.getElementById("status");
+
+        // Convert a single file
+        async function convertFile(file) {
+            const buffer = await file.arrayBuffer();
+            const result = convertSVG(new Uint8Array(buffer));
+
+            if (result.error) {
+                throw new Error(result.error);
+            }
+
+            // Create download
+            const blob = new Blob([result.result], { type: "application/xml" });
+            const url = URL.createObjectURL(blob);
+
+            const link = document.createElement("a");
+            link.href = url;
+            link.download = file.name.replace(/\.svg$/i, ".graphml");
+            link.click();
+
+            URL.revokeObjectURL(url);
+        }
+
+        // multiple files
+        async function handleFiles(files) {
+            if (!ready) {
+                status.className = "err";
+                status.textContent = "Loading...";
+                return;
+            }
+
+            status.className = "";
+            status.textContent = "Converting...";
+
+            try {
+                for (const file of files) {
+                    await convertFile(file);
+                }
+
+                status.className = "ok";
+                status.textContent = "Done";
+            } catch (err) {
+                status.className = "err";
+                status.textContent = err.message;
+            }
+        }
+
+        // File picker
+        fileInput.addEventListener("change", (e) => {
+            handleFiles(e.target.files);
+            e.target.value = ""; // reset input
+        });
+
+        // Drag over
+        drop.addEventListener("dragover", (e) => {
+            e.preventDefault();
+            drop.classList.add("over");
+        });
+
+        // Drag leave
+        drop.addEventListener("dragleave", () => {
+            drop.classList.remove("over");
+        });
+
+        // Drop files
+        drop.addEventListener("drop", (e) => {
+            e.preventDefault();
+            drop.classList.remove("over");
+
+            const files = [...e.dataTransfer.files]
+                .filter(f => f.name.endsWith(".svg"));
+
+            handleFiles(files);
+        });
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,5 @@
+{{define "resources"}}
+    {{- range $idx, $node := .}}
+            <y:Resource id="{{$idx}}" xml:space="preserve">{{$node.SVG}}</y:Resource>
+    {{- end}}
+{{- end}}
