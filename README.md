@@ -30,4 +30,5 @@ go run ./cmd -path /test -out ./out
 
 ## WASM Demo
 
-`/web` contains the WASM demo hosted on Github Pages, for single or multiple file converions. It lacking the ability to retain the source folder structure that exists in the cli version.
+`/web` contains the WASM demo hosted on Github Pages, for single or multiple file converions. 
+It lacks the ability to retain the source folder structure that exists in the cli version.
