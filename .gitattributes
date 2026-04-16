@@ -1,7 +1,2 @@
 # Exclude web build artifacts and static assets from language statistics
 web/** linguist-vendored
-*.wasm linguist-generated
-web/wasm_exec.js linguist-generated
-web/*.js linguist-generated
-web/*.css linguist-generated
-web/*.html linguist-generated

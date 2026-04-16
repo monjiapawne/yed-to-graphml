@@ -9,16 +9,9 @@ permissions:
   pages: write
   id-token: write
 
-concurrency:
-  group: pages
-  cancel-in-progress: true
-
 jobs:
-  deploy:
+  build-and-deploy:
     runs-on: ubuntu-latest
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
     steps:
       - uses: actions/checkout@v4
 
@@ -27,13 +20,12 @@ jobs:
           go-version-file: go.mod
 
       - name: Build WASM
-        run: GOOS=js GOARCH=wasm go build -o web/main.wasm ./web/
+        run: GOOS=js GOARCH=wasm go build -o web/main.wasm ./web
 
-      - uses: actions/configure-pages@v5
-
-      - uses: actions/upload-pages-artifact@v3
+      - name: Upload site
+        uses: actions/upload-pages-artifact@v3
         with:
           path: web
 
-      - id: deployment
+      - name: Deploy
         uses: actions/deploy-pages@v4
