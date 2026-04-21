@@ -1,6 +1,5 @@
 module github.com/monjiapawne/svg-to-graphml
 
-
 go 1.26.1
 
 require github.com/tdewolff/canvas v0.0.0-20260406091912-5d4f7059846e

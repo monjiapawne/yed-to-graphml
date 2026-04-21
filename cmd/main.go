@@ -8,7 +8,7 @@ import (
 	"os"
 	"path/filepath"
 
-	"github.com/yed-palettes/svg-to-graphml/converter"
+	"github.com/monjiapawne/svg-to-graphml/converter"
 )
 
 type Cfg struct {

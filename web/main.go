@@ -6,7 +6,7 @@ import (
 	"bytes"
 	"syscall/js"
 
-	"github.com/yed-palettes/svg-to-graphml/converter"
+	"github.com/monjiapawne/svg-to-graphml/converter"
 )
 
 func main() {
